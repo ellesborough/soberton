@@ -1,0 +1,31 @@
+---
+layout: default
+title: 360° Views
+---
+<h1>360° Panoramic Views</h1>
+Click a marker, then the popup to see a 360° view from that position
+<div id="map-large"></div>
+
+<script>
+    var base_maps = {};
+    {%- for layer in site.map_layers %}
+        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxZoom: 19,  attribution: '{{layer.attribution}}'});
+        base_maps['{{layer.name}}'] = layer{{forloop.index}};
+    {% endfor -%}
+    var map = L.map('map-large', { layers: [layer1] });
+    
+    var layerControl = L.control.layers(base_maps, {}).addTo(map);
+
+    var markers = [];
+    {% for panorama in site.panorama %}
+        let marker{{forloop.index}}  = L.marker([{{panorama.location.latitude}}, {{panorama.location.longitude}}])
+            .bindPopup('{%- include panorama_link_by_nid.html nid=page.photo_sphere -%}')
+            .openPopup();
+        markers.push(marker{{forloop.index}})
+    {% endfor %}
+
+    var group = new L.featureGroup(markers).addTo(map)
+    map.fitBounds(group.getBounds());
+
+</script>
+
