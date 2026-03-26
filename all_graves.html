@@ -1,0 +1,30 @@
+---
+layout: default
+title: Graves
+---
+{% assign ordered_graves = site.graves | sort: "title" %}
+<h1>All Graves</h1>
+<table>
+<tr>
+    <th>Reference</th>
+    <th>Inscription</th>
+    <th>People</th>
+</tr>
+{% for grave in ordered_graves %}
+<tr>
+    <td><a href="{{site.baseurl}}{{ grave.url }}">{{grave.title}}</a><br>
+    {%- if grave.grid_square and grid_square.size != 0 -%}
+        {{grave.grid_square}}<br>
+    {%- endif -%}
+    {%- if grave.grave_type and grave_type.size != 0 -%}
+        {{grave.grave_type}}<br>    
+    {%- endif -%}
+    {%- if grave.grave_century and grave.grave_century.size != 0 -%}
+        {{grave.grave_century}}{%- if grave.grave_century == 21 %}st {%- else %}th {%- endif %} century
+    {%- endif -%}    
+    </td>
+    <td>{{grave.inscription | newline_to_br }}</td>
+    <td>{%- include format_person_links.html people=grave.people -%}</td>
+</tr>
+{% endfor %}
+</table>

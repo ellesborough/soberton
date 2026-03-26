@@ -1,0 +1,33 @@
+---
+layout: default
+title: People
+---
+{% assign ordered_people = site.people | sort: "family_name" %}
+<h1>All People</h1>
+<table>
+<tr>
+    <th>Forenames</th>
+    <th>Family Name</th>
+    <th>Date of Birth</th>
+    <th>Date of Death</th>
+    <th>Grave</th>
+    <th></th>
+</tr>
+{% for person in ordered_people %}
+<tr>
+    <td>{{person.forenames}}</td>
+    <td>{{person.family_name}}
+        {% if person.maiden_name and person.maiden_name.size != 0 %}
+            <br><small>(née {{person.maiden_name}})</small>
+        {% endif %}
+    </td>
+    <td>{%- include format_partial_date.html date_str=person.date_of_birth -%}<br>{%- include district_link_by_nid.html nid=person.birth_record.district -%}</td>
+    <td>{%- include format_partial_date.html date_str=person.date_of_death -%}<br>{%- include district_link_by_nid.html nid=person.death_record.district -%}</td>
+
+    <td>{%- include grave_link_by_nid.html nid=person.grave -%}</td>
+
+    <td><a href="{{site.baseurl}}{{ person.url }}">Details</a><br/></td>
+
+</tr>
+{% endfor %}
+</table>

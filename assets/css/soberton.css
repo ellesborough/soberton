@@ -1,0 +1,26 @@
+.field-name {
+    font-weight: bold;
+    color: green;
+}
+
+.field-inscription {
+    font-style: italic;
+}
+
+.field-image {
+    width: 400px;
+    margin: 5px;
+}
+
+#field-map {
+    height:400px;
+}
+
+.field-photosphere {
+    width: 100%;
+    height:500px;
+}
+
+.bmd-record {
+    margin-left: 10px;
+}

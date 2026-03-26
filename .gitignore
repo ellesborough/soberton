@@ -1,0 +1,13 @@
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
+
+Gemfile.lock
+
+import/vendor
+import/People/raw
+import/Graves/raw
+import/Panoarama/raw
+import/PanoramaMarkers/raw

@@ -1,0 +1,6 @@
+{%- assign panorama = site.panorama | where: "nid", include.nid | first -%}
+{%- if panorama -%}
+    <a href="{{site.baseurl}}{{panorama.url}}">{{panorama.title}}</a>
+{%- else -%}
+    {{include.nid}}
+{%- endif -%}

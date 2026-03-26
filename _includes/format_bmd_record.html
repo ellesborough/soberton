@@ -1,0 +1,19 @@
+<div class="bmd-record">
+<table>
+{%- if include.bmd_record.quarter.size != 0 -%}
+<tr>
+<td><span class="field-name">Quarter: </span><td>{{include.bmd_record.quarter}}
+</tr>
+{%- endif -%}
+{%- if include.bmd_record.year.size != 0 -%}
+<tr>
+<td><span class="field-name">Year: </span><td>{{include.bmd_record.year}}
+</tr>
+{%- endif -%}
+{%- if include.bmd_record.district.size != 0 -%}
+<tr>
+<td><span class="field-name">Registration District: </span><td>{%- include district_link_by_nid.html nid=include.bmd_record.district -%}
+</tr>
+{%- endif -%}
+</table>
+</div>

@@ -1,0 +1,6 @@
+{%- assign grave = site.graves | where: "nid", include.nid | first -%}
+{%- if grave -%}
+    <a href="{{site.baseurl}}{{grave.url}}">{{grave.title}}</a>
+{%- else -%}
+    {{include.nid}}
+{%- endif -%}

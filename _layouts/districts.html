@@ -1,0 +1,58 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+<p><span class="field-name">Notes: </span></p>
+{{ content }}
+
+{%- if page.centre and page.centre.size != 0 -%}
+    <p><span class="field-name">District Centre: </span>
+    <div id="field-map"></div>
+    </p>
+{%- endif -%}
+
+<p><span class="field-name">People With Birth Records in {{page.title}} District: </span></p>
+{%- for person in site.people -%}
+    {%- if person.birth_record.district == page.nid -%}
+        <a href="{{site.baseurl}}{{person.url}}">{{person.title}}</a><br>
+    {%- endif %}
+{%- endfor -%}
+<p/>
+
+<p><span class="field-name">People With Marriage Records in {{page.title}} District: </span></p>
+{%- for person in site.people -%}
+    {%- for marriage_record in person.marriage_records -%}
+        {%- if marriage_record.district == page.nid -%}
+            <a href="{{site.baseurl}}{{person.url}}">{{person.title}}</a><br>
+            {% break %}
+        {%- endif %}
+    {%- endfor -%}
+{%- endfor -%}
+<p/>
+
+<p><span class="field-name">People With Death Records in {{page.title}} District: </span></p>
+{%- for person in site.people -%}
+    {%- if person.death_record.district == page.nid -%}
+        <a href="{{site.baseurl}}{{person.url}}">{{person.title}}</a><br>
+    {%- endif %}
+{%- endfor -%}
+<p/>
+
+<script>
+{%- if page.centre and page.centre.size != 0 %}
+    var base_maps = {};
+    {%- for layer in site.map_layers %}
+        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxZoom: 19,  attribution: '{{layer.attribution}}'});
+        base_maps['{{layer.name}}'] = layer{{forloop.index}};
+    {% endfor -%}
+    var map = L.map('field-map', {
+        center: [{{page.centre.latitude}}, {{page.centre.longitude}}],
+        zoom: 12,
+        layers: [layer1]
+    });
+    var layerControl = L.control.layers(base_maps, {}).addTo(map);
+    var marker = L.marker([{{page.centre.latitude}}, {{page.centre.longitude}}]).addTo(map);
+
+{%- endif -%}
+</script>

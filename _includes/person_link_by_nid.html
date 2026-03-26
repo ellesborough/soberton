@@ -1,0 +1,6 @@
+{%- assign person = site.people | where: "nid", include.nid | first -%}
+{%- if person -%}
+    <a href="{{site.baseurl}}{{person.url}}">{{person.title}}</a>
+{%- else -%}
+    {{include.nid}}
+{%- endif -%}

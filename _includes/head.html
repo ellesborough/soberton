@@ -1,0 +1,65 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="{{ "/assets/hampshire_soberton_ring_48.jpg" | relative_url }}">
+  {%- seo -%}
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  {%- feed_meta -%}
+  {%- if jekyll.environment == 'production' and site.google_analytics -%}
+    {%- include google-analytics.html -%}
+  {%- endif -%}
+
+  <link rel="stylesheet" href="{{ "/assets/css/soberton.css" | relative_url }}">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="     crossorigin=""/>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<!-- Version 3.2.4 as taken from Drupal site -->
+    <link rel="stylesheet" href="{{ "/assets/css/psv-3.2.4/photo-sphere-viewer.min.css" | relative_url }}">
+
+    <script src=" {{ "/assets/js/psv-3.2.4/three.min.js" | relative_url }}"></script>
+    <script src=" {{ "/assets/js/psv-3.2.4/D.min.js" | relative_url }}"></script>
+    <script src=" {{ "/assets/js/psv-3.2.4/uevent.min.js" | relative_url }}"></script>
+    <script src=" {{ "/assets/js/psv-3.2.4/doT.min.js" | relative_url }}"></script>
+    <script src=" {{ "/assets/js/psv-3.2.4/photo-sphere-viewer.js" | relative_url }}"></script>
+
+
+<!-- Version 3.6.0 - missing u.Math.deg2rad
+  <link href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@3.6.0/dist/photo-sphere-viewer.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dot@1.1.3/doT.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uevent@1.0.0/uevent.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@3.6.0/dist/photo-sphere-viewer.min.js"></script>
+-->
+
+<!-- Version 4
+  <link href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.8.1/dist/photo-sphere-viewer.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/plugins/markers.min.css" rel="stylesheet"/>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uevent@2/browser.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/plugins/markers.min.js"></script>
+-->
+
+<!--  Version 5
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.css" />
+
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+            "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.module.js",
+            "@photo-sphere-viewer/markers-plugin": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.module.js"
+        }
+    }
+  </script>
+-->
+
+</head>

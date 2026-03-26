@@ -1,0 +1,89 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+<p><span class="field-name">Forenames:</span> {{page.forenames}}</p>
+<p><span class="field-name">Family Name:</span> {{page.family_name}}</p>
+
+{%- if page.maiden_name and page.maiden_name.size != 0 -%}
+    <p><span class="field-name">Maiden Name:</span> {{page.maiden_name}}</p>
+{%- endif -%}
+
+{%- if page.grave and page.grave.size != 0 -%}
+    <p><span class="field-name">Grave: </span> {%- include grave_link_by_nid.html nid=page.grave -%}</p>
+{%- endif -%}
+
+{%- if page.spouse and page.spouse.size != 0 -%}
+<p><span class="field-name">Spouse: </span>
+    {%- if page.spouse.size == 1 -%}
+        {%- assign spouse_id = page.spouse[0] -%}
+        {%- include person_link_by_nid.html nid=spouse_id -%}
+    {%- else -%}
+        <ul>
+        {%- for spouse_id in page.spouse -%}
+            <li>
+                {%- include person_link_by_nid.html nid=spouse_id -%}
+            </li>
+        {%- endfor -%}
+        </ul>
+    {%- endif -%}
+</p>
+{%- endif -%}
+
+{%- if page.children and page.children.size != 0 -%}
+<p><span class="field-name">Children: </span>
+    {%- if page.children.size == 1 -%}
+        {%- assign child_id = page.children[0] -%}
+        {%- include person_link_by_nid.html nid=child_id -%}
+    {%- else -%}
+        <ul>
+        {%- for child_id in page.children -%}
+            <li>
+                {%- include person_link_by_nid.html nid=child_id -%}
+            </li>
+        {%- endfor -%}
+        </ul>
+    {%- endif -%}
+</p>
+{%- endif -%}
+
+{%- if page.father and page.father.size != 0 -%}
+    <p><span class="field-name">Father: </span>
+        {%- include person_link_by_nid.html nid=page.father -%}
+    </p>
+{%- endif -%}
+
+{%- if page.mother and page.mother.size  != 0 -%}
+<p><span class="field-name">Mother: </span>
+    {%- include person_link_by_nid.html nid=page.mother -%}
+</p>
+{%- endif -%}
+
+{%- if page.date_of_birth and page.date_of_birth.size != 0 -%}
+<p><span class="field-name">Date of Birth: </span> {%- include format_partial_date.html date_str=page.date_of_birth -%}</p>
+{%- endif -%}
+
+{%- if page.date_of_death and page.date_of_death.size != 0 -%}
+<p><span class="field-name">Date of Death: </span> {%- include format_partial_date.html date_str=page.date_of_death -%}</p>
+{%- endif -%}
+
+{%- if page.birth_record and page.birth_record.size != 0 -%}
+<p><span class="field-name">Birth Record: </span> {%- include format_bmd_record.html bmd_record=page.birth_record -%}</p>
+{%- endif -%}
+
+{%- if page.marriage_records and page.marriage_records.size != 0 -%}
+<p><span class="field-name">Marriage Records: </span></p>
+    {%- for bmd_record in page.marriage_records -%}
+    <p>{%- include format_bmd_record.html bmd_record=bmd_record -%}</p>
+    {%- endfor -%}
+{%- endif -%}
+
+{%- if page.death_record and page.death_record.size != 0 -%}
+<p><span class="field-name">Death Record: </span> {%- include format_bmd_record.html bmd_record=page.death_record -%}</p>
+{%- endif -%}
+
+{%- if content and content.size != 0 and content != '' -%}
+<p><span class="field-name">Notes: </span></p>
+{{ content }}
+{%- endif -%}

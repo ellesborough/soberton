@@ -1,0 +1,69 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+{%- if page.photo_sphere and page.photo_sphere.size != 0 -%}
+    <p><span class="field-name">Panorama: </span> {%- include panorama_link_by_nid.html nid=page.photo_sphere -%}</p>
+{%- endif -%}
+
+{%- if page.grave and page.grave.size != 0 -%}
+    <p><span class="field-name">Grave: </span> {%- include grave_link_by_nid.html nid=page.grave -%}</p>
+{%- endif -%}
+
+<div class="field-photosphere" id="panorama-viewer"></div>
+
+<!-- <script type="module"> -->
+<script>
+    //import { Viewer } from '@photo-sphere-viewer/core';  // V5
+    //import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin'; // V5
+
+    {%- assign grave = site.graves | where: "nid", page.grave | first -%}
+
+    {%- assign panorama = site.panorama | where: "nid", page.photo_sphere | first %}
+    var panorama_image = '{{site.baseurl}}{{site.panorama_path}}/{{panorama.image_filename}}';
+
+    //const viewer = new Viewer({   // V5
+    //const viewer = new PhotoSphereViewer.Viewer({     // V4
+    const viewer = new PhotoSphereViewer({
+
+//        plugins: [   // V4 and V5
+//            MarkersPlugin.withConfig({   // V5
+//            [PhotoSphereViewer.MarkersPlugin, {  // V4
+            markers: [
+                {
+                    id:         'grave-marker',
+//                    position:   { yaw: {{page.location.longitude}} - Math.PI, pitch: {{page.location.latitude}} }, // V5
+//                    longitude: {{page.location.longitude}} - Math.PI,  // V4
+                    longitude: {{page.location.longitude}},
+                    latitude: {{page.location.latitude}},
+                    image:      '{{site.baseurl}}{{site.panorama_path}}/{{site.panorama_marker_icon}}',
+                    //size:       { width: 32, height: 32 },  // V4 and V5
+                    width: 32,
+                    height: 32,
+                    tooltip:   '{{grave.title}} ({{grave.grid_square}})',
+                    anchor:     'bottom center',
+                    content:   `<a href="{{site.baseurl}}{{grave.url}}">{{grave.title}}</a> ({{grave.grid_square}})<br>
+                                    {{grave.inscription | newline_to_br }}<br><br>
+                                    {%- include format_person_links.html people=grave.people -%}`
+                },
+            ],
+//        }],
+//        ],
+        container:  document.querySelector('#panorama-viewer'),
+        panorama:   panorama_image,
+        caption:    "Soberton St. Peter's",
+        // Version 5
+        //defaultYaw: {{page.location.longitude}} - Math.PI,
+        //defaultPitch: {{page.location.latitude}}
+        // Version 4
+        //defaultLong: {{page.location.longitude}} - Math.PI,
+        //defaultLat: {{page.location.latitude}},
+        // Version 3
+        default_long: {{page.location.longitude}},
+        default_lat: {{page.location.latitude}},
+        time_anim:  false,
+        navbar:     ['autorotate','zoom','markers','caption','fullscreen'], // 'download'
+
+    });
+</script>

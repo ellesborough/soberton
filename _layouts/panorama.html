@@ -1,0 +1,61 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+<div class="field-photosphere" id="panorama-viewer"></div>
+
+{%- if page.location and page.location.size != 0 -%}
+    <p><span class="field-name">Location: </span>
+    <div id="field-map"></div>
+    </p>
+{%- endif -%}
+
+<script>
+    {%- assign markers = site.markers | where: "photo_sphere", page.nid %}
+
+    var markers = [
+    {%- for marker in markers -%}
+        {%- assign grave = site.graves | where: "nid", marker.grave | first %}
+        {
+            id:        '{{marker.grave}}',
+            longitude: {{marker.location.longitude}},
+            latitude:  {{marker.location.latitude}},
+            image:     '{{site.baseurl}}{{site.panorama_path}}/{{site.panorama_marker_icon}}',
+            width:     32,
+            height:    32,
+            tooltip:   '{{grave.title}} ({{grave.grid_square}})',
+            anchor:    'bottom center',
+            content:   `<a href="{{site.baseurl}}{{grave.url}}">{{grave.title}}</a> ({{grave.grid_square}})<br>
+                            {{grave.inscription | newline_to_br }}<br><br>
+                            {%- include format_person_links.html people=grave.people -%}`
+        },
+    {%- endfor -%}
+    ];
+    var panorama_image = '{{site.baseurl}}{{site.panorama_path}}/{{page.image_filename}}';
+
+    const viewer = new PhotoSphereViewer({
+        markers:    markers,
+        container:  document.querySelector('#panorama-viewer'),
+        panorama:   panorama_image,
+        caption:    "Soberton St. Peter's",
+        time_anim:  10000,
+        navbar:     ['autorotate','zoom','markers','caption','fullscreen'], // 'download'
+    });
+
+{%- if page.location and page.location.size != 0 %}
+    var base_maps = {};
+    {%- for layer in site.map_layers %}
+        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxZoom: 19,  attribution: '{{layer.attribution}}'});
+        base_maps['{{layer.name}}'] = layer{{forloop.index}};
+    {% endfor -%}
+    var map = L.map('field-map', {
+        center: [{{page.location.latitude}}, {{page.location.longitude}}],
+        zoom: 19,
+        layers: [layer1]
+    });
+    var layerControl = L.control.layers(base_maps, {}).addTo(map);
+    var marker = L.marker([{{page.location.latitude}}, {{page.location.longitude}}]).addTo(map);
+{%- endif -%}
+
+</script>

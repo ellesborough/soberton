@@ -1,0 +1,101 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+{%- if page.inscription and page.inscription.size != 0 -%}
+    <p><span class="field-name">Inscription: </span></p>
+    <div class="field-inscription">
+    <p>{{page.inscription | newline_to_br }}</p>
+    </div>
+{%- endif -%}
+
+{%- if page.grave_type and page.grave_type.size != 0 -%}
+    <p><span class="field-name">Grave Type: </span> {{page.grave_type}}</p>
+{%- endif -%}
+
+{%- if page.graveyard_section and page.graveyard_section.size != 0 -%}
+    <p><span class="field-name">Graveyard Section: </span> {{page.graveyard_section}}</p>
+{%- endif -%}
+
+{%- if page.grave_plan_reference and page.grave_plan_reference.size != 0 -%}
+    <p><span class="field-name">Graveyard Plan Reference: </span> {{page.grave_plan_reference}}</p>
+{%- endif -%}
+
+{%- if page.grid_square and page.grid_square.size != 0 -%}
+    <p><span class="field-name">Grid Square: </span> {{page.grid_square}}</p>
+{%- endif -%}
+
+{%- if page.grave_century and page.grave_century.size != 0 -%}
+    <p><span class="field-name">Century: </span> {{page.grave_century}}{%- if page.grave_century == 21 %}st {%- else %}th {%- endif %}</p>
+{%- endif -%}
+
+{%- if page.people and page.people.size != 0 -%}
+<p><span class="field-name">People: </span>
+    {%- if page.people.size == 1 -%}
+        {%- assign person_id = page.people[0] -%}
+        {%- include person_link_by_nid.html nid=person_id -%}
+    {%- else -%}
+        <ul>
+        {%- for person_id in page.people -%}
+            <li>
+                {%- include person_link_by_nid.html nid=person_id -%}
+            </li>
+        {%- endfor -%}
+        </ul>
+    {%- endif -%}
+</p>
+{%- endif -%}
+
+{%- if page.photo_sphere_marker and page.photo_sphere_marker.size != 0 -%}
+<p><span class="field-name">360° Views: </span>
+    {%- if page.photo_sphere_marker.size == 1 -%}
+        {%- assign marker_id = page.photo_sphere_marker[0] -%}
+        {%- include marker_link_by_nid.html nid=marker_id -%}
+    {%- else -%}
+        <ul>
+        {%- for marker_id in page.photo_sphere_marker -%}
+            <li>
+                {%- include marker_link_by_nid.html nid=marker_id -%}
+            </li>
+        {%- endfor -%}
+        </ul>
+    {%- endif -%}
+</p>
+{%- endif -%}
+
+{%- if page.images and page.images.size != 0 -%}
+<p><span class="field-name">Images: </span></p>
+    {%- for image in page.images -%}
+        <div class="field-image">
+            <img src="{{image}}">
+        </div>
+    {%- endfor -%}
+{%- endif -%}
+
+{%- if page.location and page.location.size != 0 -%}
+    <p><span class="field-name">Location: </span></p>
+    <div id="field-map"></div>
+{%- endif -%}
+
+{%- if content and content.size != 0 -%}
+<p><span class="field-name">Notes: </span></p>
+{{ content }}
+{%- endif -%}
+
+<script>
+{%- if page.location and page.location.size != 0 %}
+    var base_maps = {};
+    {%- for layer in site.map_layers %}
+        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxZoom: 19,  attribution: '{{layer.attribution}}'});
+        base_maps['{{layer.name}}'] = layer{{forloop.index}};
+    {% endfor -%}
+    var map = L.map('field-map', {
+        center: [{{page.location.latitude}}, {{page.location.longitude}}],
+        zoom: 19,
+        layers: [layer1]
+    });
+    var layerControl = L.control.layers(base_maps, {}).addTo(map);
+    var marker = L.marker([{{page.location.latitude}}, {{page.location.longitude}}]).addTo(map);
+{%- endif -%}
+</script>

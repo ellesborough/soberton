@@ -1,0 +1,6 @@
+{%- assign date_parts = include.date_str | split: '-' -%}
+{%- if date_parts.size == 3 -%}
+    {{include.date_str | date: '%e %b %Y'}}
+{%- else -%}
+    {{include.date_str}}
+{%- endif -%}

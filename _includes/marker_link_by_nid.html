@@ -1,0 +1,6 @@
+{%- assign marker = site.markers | where: "nid", include.nid | first -%}
+{%- if marker -%}
+    <a href="{{site.baseurl}}{{marker.url}}">{{marker.title}}</a>
+{%- else -%}
+    {{include.nid}}
+{%- endif -%}
