@@ -18,8 +18,8 @@
 
 #map-large {
     height:600px;
+    margin-top: 10px;
 }
-
 
 .field-photosphere {
     width: 100%;
@@ -28,4 +28,8 @@
 
 .bmd-record {
     margin-left: 10px;
+}
+
+.search-wrapper {
+    margin-top: 10px;
 }
