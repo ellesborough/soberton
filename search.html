@@ -1,0 +1,22 @@
+---
+layout: default
+title: Search
+---
+<!-- HTML elements for search -->
+<h1>Search</h1>
+<input type="text" id="search-input" size="32" placeholder="Search for people..">
+<p>You can search for forenames, surname, maiden name, dates and keywords in the notes</p>
+<div class="search-wrapper">
+<ul id="results-container"></ul>
+</div>
+
+<script src="https://unpkg.com/simple-jekyll-search@latest/dest/simple-jekyll-search.min.js"></script>
+
+<script>
+var sjs = SimpleJekyllSearch({
+  searchInput: document.getElementById('search-input'),
+  resultsContainer: document.getElementById('results-container'),
+  json: '{{ site.baseurl }}/search.json',
+  limit : 100,
+})
+</script>

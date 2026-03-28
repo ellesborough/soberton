@@ -1,0 +1,14 @@
+---
+layout: none
+---
+[
+  {% for person in site.people %}
+    {
+      "title"      : "{{ person.title | escape }}",
+      "maiden_name": "{{ person.maiden_name | escape }}",
+      "notes"      : "{{ person.content | strip_newlines | escape }}",
+      "url"        : "{{ site.baseurl }}{{ person.url }}",
+      "date"       : "{{ person.changed }}"
+    } {% unless forloop.last %},{% endunless %}
+  {% endfor %}
+]
