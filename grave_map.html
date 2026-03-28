@@ -1,0 +1,53 @@
+---
+layout: default
+title: Grave Map
+---
+<h1>Grave Map</h1>
+
+<button onclick="map.setView(soberton_view.location, soberton_view.zoom)" >Soberton</button>
+<button onclick="map.setView(western_europe_view.location, western_europe_view.zoom)" >W. Europe</button>
+<button onclick="map.setView(whole_europe_view.location, whole_europe_view.zoom)" >Whole Europe</button>
+<button onclick="map.setView(africa_view.location, africa_view.zoom)" >Africa</button>
+<br>
+<div id="map-large"></div>
+
+<script>
+    var soberton_view       = {location: [50.9476, -1.1336], zoom: 19};
+    var western_europe_view = {location: [50.559 ,  0.829 ], zoom:  7};
+    var whole_europe_view   = {location: [49.58  , 11.65  ], zoom:  4};
+    var africa_view         = {location: [-2.20  , 33.84  ], zoom:  3};
+
+    let base_maps = {};
+    {%- for layer in site.map_layers %}
+        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxZoom: 19,  attribution: '{{layer.attribution}}'});
+        base_maps['{{layer.name}}'] = layer{{forloop.index}};
+    {% endfor -%}
+    var map = L.map('map-large', { layers: [layer1] });
+
+    map.setView(soberton_view.location, soberton_view.zoom);
+
+    let layerControl = L.control.layers(base_maps, {}).addTo(map);
+
+    var icon_filename = '{{site.baseurl}}{{site.grave_map_marker}}';
+
+    let icon = L.icon({
+        iconUrl    : icon_filename,
+        iconSize   : { x: 25, y: 25 },
+        iconAnchor : { x: 13, y: 25 },
+        popupAnchor: { x:  0, y:  0 },
+    });
+
+    let markers = [];
+    {% for grave in site.graves %}
+        {%- if grave.location and grave.location.size != 0 -%}
+            let marker{{forloop.index}} = L.marker([{{grave.location.latitude}}, {{grave.location.longitude}}], {icon: icon})
+                .bindPopup('{%- include grave_link_by_nid.html nid=grave.nid -%}')
+                .openPopup();
+            markers.push(marker{{forloop.index}});
+        {%- endif -%}
+    {% endfor %}
+
+    let group = new L.featureGroup(markers).addTo(map);
+//    map.fitBounds(group.getBounds());
+
+</script>
