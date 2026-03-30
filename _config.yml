@@ -90,11 +90,13 @@ defaults:
       type: "graves"
     values:
       layout: "graves"
+      include_leafletjs: true
   - scope:
       path: ""
       type: "districts"
     values:
       layout: "districts"
+      include_leafletjs: true
   - scope:
       path: ""
       type: "markers"
@@ -105,6 +107,7 @@ defaults:
       type: "panorama"
     values:
       layout: "panorama"
+      include_leafletjs: true
 
 # plugins:
 #  - jekyll-feed
