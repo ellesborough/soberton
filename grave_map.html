@@ -2,6 +2,7 @@
 layout: default
 title: Grave Map
 include_leafletjs: true
+include_leaflet_cluster_plugin: false
 ---
 <h1>Grave Map</h1>
 
@@ -20,7 +21,7 @@ include_leafletjs: true
 
     let base_maps = {};
     {%- for layer in site.map_layers %}
-        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxZoom: 19,  attribution: '{{layer.attribution}}'});
+        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxNativeZoom:19, maxZoom:20,  attribution: '{{layer.attribution}}'});
         base_maps['{{layer.name}}'] = layer{{forloop.index}};
     {% endfor -%}
     var map = L.map('map-large', { layers: [layer1] });
@@ -48,7 +49,12 @@ include_leafletjs: true
         {%- endif -%}
     {% endfor %}
 
+
+{%- if page.include_leaflet_cluster_plugin -%}
+    let group = new L.markerClusterGroup().addTo(map);
+    group.addLayers(markers);
+{%- else %}
     let group = new L.featureGroup(markers).addTo(map);
-//    map.fitBounds(group.getBounds());
+{%- endif %}
 
 </script>
