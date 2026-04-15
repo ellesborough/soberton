@@ -1,0 +1,94 @@
+---
+layout: default
+title: Calendar
+
+include_event_calendar_js: true
+---
+
+<div id="activity_calendar"></div>
+
+<script>
+
+// See https://github.com/vkurko/calendar
+
+var events = [
+  {%- for person in site.people -%}
+    {%- unless person.date_of_birth == empty -%}
+        {
+            "id"            : "{{person.nid}}-birthday",
+            "title"         : "{{person.title}}",
+            "dob_str"       : "{{person.date_of_birth}}",
+            "allDay"        : true,
+            "editable"      : false,
+            "classNames"    : "person-calendar-birthday",
+            "extendedProps" : { "url" : "{{site.baseurl}}{{ person.url }}" }
+        },
+    {%- endunless -%}
+    {%- unless person.date_of_death == empty -%}
+        {
+            "id"            : "{{person.nid}}-death",
+            "title"         : "{{person.title}}",
+            "dod_str"       : "{{person.date_of_death}}",
+            "allDay"        : true,
+            "editable"      : false,
+            "classNames"    : "person-calendar-death",
+            "extendedProps" : { "url" : "{{site.baseurl}}{{ person.url }}" }
+        },
+    {%- endunless -%}
+  {%- endfor -%}
+];
+
+// Date.parse(str + 'T00:00:00')); // seem to need the explicit time to get correct date pre-1970 (or pre-1900?)
+
+//d = new Date(Date.parse('1844-04-15'))
+//Sun Apr 14 1844 23:58:45 GMT-0001 (British Summer Time)
+
+//d = new Date(Date.parse('1844-04-15T00:00:00'))
+//Mon Apr 15 1844 00:00:00 GMT-0001 (British Summer Time)
+
+
+// Markdown DoB and DoD are 'partial' dates, so may not have month and date
+all_events = events.filter((v) => v.dob_str?.split('-').length >= 3).map(v => {
+
+    let d = new Date(Date.parse(v.dob_str + 'T00:00:00'));
+    let now = new Date();
+    v.extendedProps.birth_year = d.getFullYear();
+    v.start = now.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() ;
+    v.end = v.start;
+    return v;
+});
+
+all_events = all_events.concat(events.filter((v) => v.dod_str?.split('-').length >= 3).map(v => {
+
+    let d = new Date(Date.parse(v.dod_str + 'T00:00:00'));
+    let now = new Date();
+    v.extendedProps.death_year = d.getFullYear();
+    v.start = now.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() ;
+    v.end = v.start;
+    return v;
+}));
+
+
+var ec = EventCalendar.create(document.getElementById('activity_calendar'), {
+  view: 'dayGridMonth',
+  headerToolbar: {
+    start: 'prev,next',
+    center: 'title',
+    end: 'today'
+  },
+  locale: 'en-GB', // triggers 24-hour time formats
+  events: all_events,
+  eventClick: function (info) {
+    window.location.href = info.event.extendedProps.url;
+  },
+  eventContent: function (info) {
+
+    let html = '<div class="calendar-event ' + info.event.classNames + ' ">'
+                  + info.event.title
+                +'</div>';
+
+    return { html: html }
+}
+});
+
+</script>

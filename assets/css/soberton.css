@@ -33,3 +33,13 @@
 .search-wrapper {
     margin-top: 10px;
 }
+
+.person-calendar-birthday {
+    background-color: #f5c4c4;
+    color: black;
+}
+
+.person-calendar-death {
+    background-color: lightgrey;
+    color: black;
+}
