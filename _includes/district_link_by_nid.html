@@ -1,6 +1,8 @@
+{%- if include.nid -%}
 {%- assign district = site.districts | where: "nid", include.nid | first -%}
 {%- if district -%}
     <a href="{{site.baseurl}}{{district.url}}">{{district.title}}</a>
 {%- else -%}
     {{include.nid}}
+{%- endif -%}
 {%- endif -%}
