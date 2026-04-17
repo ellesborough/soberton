@@ -3,6 +3,8 @@ layout: default
 title: Grave Map
 include_leafletjs: true
 include_leaflet_cluster_plugin: false
+include_leaflet_fullscreen_plugin: true
+include_leaflet_easybutton_plugin: false
 ---
 <h1>Grave Map</h1>
 
@@ -21,10 +23,28 @@ include_leaflet_cluster_plugin: false
 
     let base_maps = {};
     {%- for layer in site.map_layers %}
-        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxNativeZoom:19, maxZoom:20,  attribution: '{{layer.attribution}}'});
+        var layer{{forloop.index}} = L.tileLayer('{{layer.url}}', { maxNativeZoom:19, maxZoom:23,  attribution: '{{layer.attribution}}'});
         base_maps['{{layer.name}}'] = layer{{forloop.index}};
     {% endfor -%}
     var map = L.map('map-large', { layers: [layer1] });
+
+{%- if page.include_leaflet_fullscreen_plugin -%}
+    map.addControl(new L.Control.Fullscreen({pseudoFullscreen: true}));
+
+    map.on('fullscreenchange', function () {
+        if (map.isFullscreen()) {
+            africa_button_control.addTo(map);
+            whole_europe_button_control.addTo(map);
+            weurope_button_control.addTo(map);
+            soberton_button_control.addTo(map);
+        } else {
+            africa_button_control.remove();
+            whole_europe_button_control.remove();
+            weurope_button_control.remove();
+            soberton_button_control.remove();
+        }
+    });
+{%- endif %}
 
     map.setView(soberton_view.location, soberton_view.zoom);
 
@@ -46,15 +66,39 @@ include_leaflet_cluster_plugin: false
                 .bindPopup('{%- include grave_link_by_nid.html nid=grave.nid -%}')
                 .openPopup();
             markers.push(marker{{forloop.index}});
-        {%- endif -%}
+        {% endif %}
     {% endfor %}
 
 
-{%- if page.include_leaflet_cluster_plugin -%}
+{% if page.include_leaflet_cluster_plugin %}
     let group = new L.markerClusterGroup().addTo(map);
     group.addLayers(markers);
-{%- else %}
+{% else %}
     let group = new L.featureGroup(markers).addTo(map);
-{%- endif %}
+{% endif %}
+
+
+L.Control.TextButton = L.Control.extend({
+    onAdd: function(map) {
+        return this._button;
+    },
+    onRemove: function(map) { // Nothing to do here
+    },
+    initialize: function(options) {
+        this._button = L.DomUtil.create('button');
+        this._button.innerHTML = options.name;
+        this._button.onclick = options.callback;
+        L.setOptions(this, options);
+    },
+});
+
+L.control.text_button = function(opts) {
+    return new L.Control.TextButton(opts);
+}
+
+let africa_button_control = L.control.text_button({position: 'bottomleft', name: 'Africa', callback: function() {map.setView(africa_view.location, africa_view.zoom)}});
+let whole_europe_button_control = L.control.text_button({position: 'bottomleft', name: 'Whole Europe', callback: function() {map.setView(whole_europe_view.location, whole_europe_view.zoom)}});
+let weurope_button_control = L.control.text_button({position: 'bottomleft', name: 'W. Europe', callback: function() {map.setView(western_europe_view.location, western_europe_view.zoom)}});
+let soberton_button_control = L.control.text_button({position: 'bottomleft', name: 'Soberton', callback: function() {map.setView(soberton_view.location, soberton_view.zoom)}});
 
 </script>
